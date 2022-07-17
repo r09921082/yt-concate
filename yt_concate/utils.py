@@ -6,6 +6,7 @@ from yt_concate.settings import DOWNLOADS_DIR
 
 
 
+
 # Helper function 的聚集地
 class Utils:
     def __init__(self):
@@ -23,14 +24,10 @@ class Utils:
         path = self.get_video_list_filepath(channel_id)
         return os.path.exists(path) and os.path.getsize(path) > 0
 
+    def caption_file_exists(self, yt):
+        file_path = yt.caption_filepath
+        return os.path.exists(file_path) and os.path.getsize(file_path) > 0
 
-    @staticmethod
-    def get_video_id_from_url(url):
-        return url.split("watch?v=")[-1]
-
-    def get_caption_filepath(self, url):
-        return os.path.join(CAPTIONS_DIR, self.get_video_id_from_url(url) + '.txt')
-
-    def caption_file_exists(self, url):
-        path = self.get_caption_filepath(url)
-        return os.path.exists(path) and os.path.getsize(path) > 0
+    def video_file_exists(self, yt):
+        file_path = yt.video_filepath
+        return os.path.exists(file_path) and os.path.getsize(file_path) > 0
