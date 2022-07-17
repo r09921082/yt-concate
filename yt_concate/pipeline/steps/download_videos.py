@@ -1,5 +1,5 @@
 from .step import Step
-from pytube import YouTube
+from pytube import YouTube, exceptions
 from yt_concate.settings import VIDEOS_DIR
 
 
@@ -9,12 +9,15 @@ class DownladVideos(Step):
         print('Videos to download=', len(yt_set))
         for yt in yt_set:  # data 為 found 物件
             url = yt.url
-
             if utils.video_file_exists(yt):
                 print(f'Found existing video file for {url}, skipping.')
                 continue
+            try:
+                print('Downloading!', url)
+                YouTube(url).streams.first().download(output_path=VIDEOS_DIR, filename=yt.id)
 
-            print('Downloading!', url)
-            YouTube(url).streams.first().download(output_path=VIDEOS_DIR, filename=yt.id)
+            except:
+                continue
+
 
         return data
