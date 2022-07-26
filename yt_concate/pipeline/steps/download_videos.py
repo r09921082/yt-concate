@@ -12,12 +12,9 @@ class DownladVideos(Step):
             if utils.video_file_exists(yt):
                 print(f'Found existing video file for {url}, skipping.')
                 continue
-            try:
-                print('Downloading!', url)
-                YouTube(url).streams.first().download(output_path=VIDEOS_DIR, filename=yt.id)
 
-            except:
-                continue
+            print('Downloading!', url)
+            YouTube(url).streams.first().download(output_path=VIDEOS_DIR, filename=f"{yt.id}.mp4")
 
 
         return data
