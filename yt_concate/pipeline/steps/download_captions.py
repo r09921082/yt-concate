@@ -37,6 +37,10 @@ class DownloadCaptions(Step):
     # print(data)
     # return data
 
+    '''
+    Multi-threading
+    '''
+
     def get_caption(self, yt, utils):
         print('Downloading caption for', yt.id)  # 做debug用
 
@@ -58,19 +62,17 @@ class DownloadCaptions(Step):
 
     def process(self, data, inputs, utils):
         multi_thread_data = []
-        # start = time.time()
+        start = time.time()
         with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
             yt = {executor.submit(self.get_caption, yt, utils): yt for yt in data}
-            # pprint.pprint(len(yt))
-            # pprint.pprint(yt)
             for future in concurrent.futures.as_completed(yt):  # 將multi_thread結果合併
                 try:
                     data = future.result()
                     multi_thread_data.append(data)
                 except UnboundLocalError:
                     pass
-        #
-        # end = time.time()
-        # print(f"It costs {end - start}")
-        # print(data)
+
+        end = time.time()
+        print(f"It costs {end - start}")
+        print(data)
         return multi_thread_data
